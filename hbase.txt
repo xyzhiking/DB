@@ -1,0 +1,37 @@
+//terminal 1:
+
+sudo service hbase-master start
+sudo service hbase-regionserver start
+
+
+create 'student','info'
+
+put 'student','1','info:name','shrushti'
+
+put 'student','1','info:age','41'
+
+
+put 'student','2','info:name','Arohi'
+
+put 'student','2','info:age','40'
+
+scan 'student'
+
+
+//terminal 2:
+
+    hive
+
+    create external table stud( 
+    key string,
+    name string,
+    age string)
+    stored by 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+    with serdeproperties(
+    "hbase.columns.mapping" = ":key,info:name,info:age"
+    )
+    tblproperties("hbase.table.name" = "student");
+        
+    select * from stud;
+
+    insert into stud values('3','Arohi','70');

@@ -1,0 +1,174 @@
+Write an application using HiveQL for flight information system which will include
+a. Creating, Dropping, and altering Database tables.
+b. Creating an external Hive table.
+c. Load table with data, insert new values and field in the table, Join tables with Hive
+d. Create index on Flight Information Table
+e. Find the average departure delay per day in 2008. Give me code
+
+
+📁 Step 2: Create HDFS Directories and Upload Data
+
+Sample flight_info.csv: (You can use your own CSV file, but here’s a sample)
+
+flight_info.csv:
+
+F1234,IndiGo,DEL,BOM,2008-06-21,5,10,A320
+F1235,IndiGo,DEL,BLR,2008-06-21,-2,0,A320
+F1236,SpiceJet,BOM,HYD,2008-06-22,3,4,B737
+F1237,Air India,DEL,MAA,2008-06-23,15,20,A321
+F1238,GoAir,DEL,PNQ,2008-06-23,0,-5,A320
+F1239,Vistara,BLR,DEL,2008-06-24,10,8,A320neo
+
+airline_info.csv:
+
+America,Airlines
+Dubai,Emirate
+France,Delta 
+
+Upload to HDFS:
+
+hdfs dfs -mkdir -p /user/hive/flight_data/
+hdfs dfs -put flight_info.csv /user/hive/flight_data/
+hdfs dfs -put airline_info.csv /user/hive/flight_data/
+
+verfy:- hdfs dfs -ls /user/hive/flight_data/
+
+
+📜 Step 3: Open Hive CLI or Hue Query Editor
+
+Option A — CLI:
+
+hive
+
+
+CREATE DATABASE IF NOT EXISTS flight_db;
+USE flight_db;
+
+-- Drop if already exists
+DROP TABLE IF EXISTS flight_info;
+DROP TABLE IF EXISTS airline_info;
+DROP TABLE IF EXISTS flight_data_ext;
+
+
+CREATE TABLE flight_info (
+  flight_id STRING,
+  airline STRING,
+  origin STRING,
+  destination STRING,
+  departure_date DATE,
+  departure_delay INT,
+  arrival_delay INT
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+
+-- Alter table to add new column
+
+ALTER TABLE flight_info ADD COLUMNS (aircraft_type STRING);
+
+
+CREATE EXTERNAL TABLE IF NOT EXISTS flight_data_ext (
+  flight_id STRING,
+  airline STRING,
+  origin STRING,
+  destination STRING,
+  departure_date DATE,
+  departure_delay INT,
+  arrival_delay INT
+
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION '/user/hive/flight_data/';
+
+
+📦 Step 5: Load Data
+
+LOAD DATA INPATH '/user/hive/flight_data/flight_info.csv' INTO TABLE flight_info;
+
+ Step 6: Insert Sample Record
+
+INSERT INTO TABLE flight_info VALUES
+('F1234', 'IndiGo', 'DEL', 'BOM', '2008-06-21', 5, 10, 'A320');
+
+
+
+
+📘 Step 7: Create airline_info Table and Load Data
+
+
+CREATE TABLE airline_info (
+  airline STRING,
+  country STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+
+LOAD DATA INPATH '/user/hive/flight_data/airline_info.csv' INTO TABLE airline_info;
+
+INSERT INTO TABLE airline_info VALUES
+('Indigo', 'India'),
+('Emirates', 'Dubai');
+
+
+
+🔗 Step 8: Join Tables (Example)
+
+
+
+
+SELECT f.flight_id, f.airline, a.country, f.departure_date
+FROM flight_info f
+JOIN airline_info a
+ON f.airline = a.airline;
+
+
+🔍 Step 9: Create Index (Optional in Hive 2.x/3.x)
+
+Note: Hive indexing is outdated, use partitions instead.
+
+CREATE INDEX idx_departure_date
+ON TABLE flight_info (departure_date)
+AS 'COMPACT'
+WITH DEFERRED REBUILD;
+
+ALTER INDEX idx_departure_date ON flight_info REBUILD;
+
+
+
+📊 Step 10: Average Departure Delay per Day in 2008
+
+SELECT departure_date, AVG(departure_delay) AS avg_dep_delay
+FROM flight_info
+WHERE YEAR(departure_date) = 2008
+GROUP BY departure_date
+ORDER BY departure_date;
+F1234,IndiGo,DEL,BOM,2008-06-21,5,10,A320
+F1235,Air India,BLR,MUM,2008-06-21,15,20,B737
+
+
+SELECT * FROM flight_info;
+
+
+SELECT 
+    f.flight_id, 
+    f.airline, 
+    a.country, 
+    f.origin, 
+    f.destination, 
+    f.departure_date, 
+    f.departure_delay, 
+    f.arrival_delay,
+    f.aircraft_type
+FROM 
+    flight_info f
+JOIN 
+    airline_info a
+ON 
+    f.airline = a.airline;
+
+
+

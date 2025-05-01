@@ -1,0 +1,98 @@
+1. 1D Visualization: Histogram (Sepal Length Distribution)
+Steps:
+
+Drag sepal_length to the Columns shelf.
+
+Click on the "Show Me" panel (top-right) and select Histogram.
+
+Drag species to the Color mark to color-code by species.
+
+(Optional) Adjust bin size: Right-click the x-axis → Edit Bins → Set to 0.5.
+
+Why? Shows how sepal lengths are distributed across species (Setosa has smaller sepals).
+
+2. 2D Visualization: Scatter Plot (Sepal Length vs. Petal Length)
+Steps:
+
+Drag sepal_length to Columns.
+
+Drag petal_length to Rows.
+
+Drag species to Color.
+
+(Optional) Add labels: Click the Label mark and check "Show mark labels".
+
+Why? Reveals clear clusters—Setosa (small petals), Versicolor/Virginica (larger petals).
+
+3. "3D" Workaround: Scatter Plot with Size Encoding (Sepal Length, Petal Length, Petal Width)
+Since Tableau doesn’t support true 3D plots, use size for the 3rd dimension:
+
+Create the same scatter plot as above (**sepal_length vs. petal_length).
+
+Drag petal_width to the Size mark.
+
+Drag species to Color.
+
+Why? Larger bubbles = wider petals (virginica has the widest petals).
+
+1. Temporal Visualization (Simulated Trend)
+Line Chart: "Observation Order vs. Sepal Length"
+Steps:
+
+Create a calculated field named "Observation Order":
+
+INDEX()
+Drag "Observation Order" to Columns.
+
+Drag "sepal_length" to Rows.
+
+Drag "species" to Color.
+
+Change mark type to Line.
+
+Why? Simulates how sepal length changes across rows (like a time series).
+
+2. Multidimensional Visualization
+Scatter Plot Matrix (All Numerical Variables)
+Steps:
+
+Click "Show Me" → Select "Scatter Plot Matrix".
+
+Hold Ctrl and select all four measures:
+
+sepal_length, sepal_width, petal_length, petal_width.
+
+Drag "species" to Color.
+
+Why? Compares all variables at once, revealing species clusters.
+
+3. Tree/Hierarchical Visualization
+Treemap: "Species by Average Petal Size"
+Steps:
+
+Drag "species" to Columns.
+
+Drag "AVG(petal_length)" to Size.
+
+Drag "AVG(petal_width)" to Color.
+
+Click "Show Me" → Treemap.
+
+Why? Shows hierarchical size comparisons (Virginica has largest petals).
+
+4. Network Visualization (Workaround)
+Node-Link Diagram: "Similar Flowers by Sepal Length"
+Steps:
+
+Create a calculated field "Similarity Group":
+
+IF [sepal_length] > 6 THEN "Large" ELSE "Small" END
+Drag "species" to Columns.
+
+Drag "Similarity Group" to Rows.
+
+Drag "COUNTD(observation_id)" to Size.
+
+Change mark type to Circle and connect with lines.
+
+Why? Groups flowers by sepal size (artificial "network")

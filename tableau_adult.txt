@@ -1,0 +1,118 @@
+1. 1D Visualizations (Single Variable)
+A. Histogram: Age Distribution by Salary
+Steps:
+
+Drag age to Columns.
+
+Click "Show Me" → Histogram.
+
+Drag salary to Color.
+
+Right-click x-axis → Edit Bins → Set to 5-year intervals.
+
+Insight: Compare age distributions for high (>50K) vs. low (<=50K) earners.
+
+B. Bar Chart: Education Levels Count
+Steps:
+
+Drag education to Columns.
+
+Drag CNT(education) to Rows.
+
+Sort bars: Right-click x-axis → Sort → Descending.
+
+2. 2D Visualizations (Two Variables)
+A. Scatter Plot: Capital Gain vs. Hours per Week
+Steps:
+
+Drag capitalgain to Columns.
+
+Drag hoursperweek to Rows.
+
+Drag salary to Color.
+
+Add trend line: Analytics pane → Trend Line → Linear.
+
+Insight: High capital gain often correlates with higher working hours.
+
+B. Heatmap: Occupation vs. Marital Status
+Steps:
+
+Drag occupation to Columns.
+
+Drag marital-status to Rows.
+
+Drag CNT(occupation) to Color.
+
+Adjust color gradient: Click Color → Edit Colors.
+
+3. 3D Visualization (Workaround)
+Bubble Chart: Age, Hours/Week, Capital Gain
+Steps:
+
+Drag age to Columns.
+
+Drag hoursperweek to Rows.
+
+Drag capitalgain to Size.
+
+Drag gender to Color.
+
+Why? Size encodes a third dimension (capital gain).
+
+4. Temporal Visualization (Simulated)
+Line Chart: "Observation Order vs. Capital Gain"
+Steps:
+
+Create calculated field Observation Order:
+
+INDEX()
+Drag Observation Order to Columns.
+
+Drag capitalgain to Rows.
+
+Drag workclass to Color.
+
+Insight: Simulates trends in capital gain across records.
+
+5. Multidimensional Visualization
+Parallel Coordinates Plot
+Steps:
+
+Normalize 4+ measures (e.g., age, educationnum, capitalgain, hoursperweek) to 0–1 scale.
+
+Drag Measure Names to Columns.
+
+Drag Normalized Values to Rows.
+
+Drag salary to Color.
+
+Insight: Compares multiple variables across salary groups.
+
+6. Tree/Hierarchical Visualization
+Treemap: Workclass → Occupation → Salary
+Steps:
+
+Create hierarchy: Right-click workclass → Hierarchy → Add occupation.
+
+Drag hierarchy to Columns/Rows.
+
+Drag AVG(capitalgain) to Size, salary to Color.
+
+Click "Show Me" → Treemap.
+
+Why? Shows earnings distribution across workclass-occupation groups.
+
+7. Network Visualization (Workaround)
+Node-Link: "Occupation Relationships"
+Steps:
+
+Create a source-target table in Tableau Prep (link occupations sharing common education levels).
+
+Use "Relationship" field as edges.
+
+Drag occupation to Detail, CNT(occupation) to Size.
+
+Use "Filled Map" mark type with curved paths.
+
+Insight: Artificial network showing occupation-education ties.

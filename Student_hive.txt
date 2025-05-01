@@ -1,0 +1,65 @@
+hdfs dfs -mkdir -p /user/hive/student_data
+hdfs dfs -put student.csv /user/hive/student_data/
+hdfs dfs -put marks.csv /user/hive/student_data/
+
+
+-- Drop tables if they already exist
+DROP TABLE IF EXISTS student;
+DROP TABLE IF EXISTS student_marks;
+
+-- Create the student table
+CREATE TABLE student (
+    StuID INT,
+    StuName STRING,
+    StuBranch STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+
+-- Create the student marks table
+CREATE TABLE student_marks (
+    StuID INT,
+    Subject STRING,
+    Marks INT
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+
+-- Alter the student table: Add Email column
+ALTER TABLE student ADD COLUMNS (Email STRING);
+
+-- Load data from HDFS
+LOAD DATA INPATH '/user/hive/student_data/student.csv' INTO TABLE student;
+LOAD DATA INPATH '/user/hive/student_data/marks.csv' INTO TABLE student_marks;
+
+-- Join query: Get all students and their marks
+SELECT 
+    s.StuID,
+    s.StuName,
+    s.StuBranch,
+    m.Subject,
+    m.Marks
+FROM 
+    student s
+JOIN 
+    student_marks m
+ON 
+    s.StuID = m.StuID;
+
+-- Query to find students who scored more than 80 marks
+SELECT 
+    s.StuID,
+    s.StuName,
+    s.StuBranch,
+    m.Subject,
+    m.Marks
+FROM 
+    student s
+JOIN 
+    student_marks m
+ON 
+    s.StuID = m.StuID
+WHERE 
+    m.Marks > 80;
