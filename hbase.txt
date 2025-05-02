@@ -12,7 +12,7 @@ put 'student','1','info:name','shrushti'
 put 'student','1','info:age','41'
 
 
-put 'student','2','info:name','Arohi'
+put 'student','2','info:name','Sayali'
 
 put 'student','2','info:age','40'
 
