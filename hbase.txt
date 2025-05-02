@@ -3,6 +3,7 @@
 sudo service hbase-master start
 sudo service hbase-regionserver start
 
+hbase shell
 
 create 'student','info'
 
